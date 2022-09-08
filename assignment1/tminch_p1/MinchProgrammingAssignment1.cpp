@@ -7,9 +7,6 @@
 #include "functions.h"
 
 int main(){
-    const int FIRST_LETTERS = 4;
-    const int LAST_LETTERS = 5;
-
     int** mat1 = populateMatrix(1,1,FIRST_LETTERS, LAST_LETTERS, false);
     int** mat2 = populateMatrix(4,2,LAST_LETTERS,FIRST_LETTERS, false);
     double** mat3 = populateMatrix(0.3,0.1,LAST_LETTERS,FIRST_LETTERS,true);
