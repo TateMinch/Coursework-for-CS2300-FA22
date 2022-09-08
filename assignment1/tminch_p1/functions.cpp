@@ -1,4 +1,8 @@
 #include "functions.h"
+/*
+* populateMatrix function with overloaded parameter type. Takes in starting value, 
+* amount to increment by, rows, cols, and a boolean indicating what order to iterate in.
+*/
 int** populateMatrix(int count, int incrementAmount, int rows, int cols, bool colsFirst){    
     int** mat = new int*[rows];
     for(int i = 0; i < rows; i++)
@@ -18,6 +22,10 @@ int** populateMatrix(int count, int incrementAmount, int rows, int cols, bool co
     return mat;
 }
 
+/*
+* populateMatrix function with overloaded parameter type. Takes in starting value, 
+* amount to increment by, rows, cols, and a boolean indicating what order to iterate in.
+*/
 double** populateMatrix(double count, double incrementAmount, int rows, int cols, bool colsFirst){
     double** mat = new double*[rows];
     for(int i = 0; i < rows; i++)
@@ -37,18 +45,31 @@ double** populateMatrix(double count, double incrementAmount, int rows, int cols
     return mat;
 }
 
+/*
+* Function to free dynamically allocated memory. Overloaded input type to deal with ints
+* and doubles.
+*/
 void freeMemory(int** mat, int numRows){
     for(int i = 0; i < numRows; i++)
         delete[] mat[i];
     delete[] mat;
 }
 
+/*
+* Function to free dynamically allocated memory. Overloaded input type to deal with ints
+* and doubles.
+*/
 void freeMemory(double** mat, int numRows){
     for(int i = 0; i < numRows; i++)
         delete[] mat[i];
     delete[] mat;
 }
 
+/*
+* Takes in filename, 2d array, num of rows, and num of cols, and writes
+* out the contents of the 2d array to the specified file. Overloaded operator
+* to deal with ints and doubles.
+*/
 void writeMatrix(string filename, int** mat, int numRows, int numCols){
     ofstream myfile;
     myfile.open(filename);
@@ -60,6 +81,11 @@ void writeMatrix(string filename, int** mat, int numRows, int numCols){
     myfile.close();
 }
 
+/*
+* Takes in filename, 2d array, num of rows, and num of cols, and writes
+* out the contents of the 2d array to the specified file. Overloaded operator
+* to deal with ints and doubles.
+*/
 void writeMatrix(string filename, double** mat, int numRows, int numCols){
     ofstream myfile;
     myfile.open(filename);
