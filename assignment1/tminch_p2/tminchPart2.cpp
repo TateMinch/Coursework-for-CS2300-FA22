@@ -28,11 +28,12 @@ vector<vector<double> > readMatrix(string filename){
 }
 
 int main(int argc, char *argv[]){
-    if(argc != 3){
-        cout << "USAGE: ./tminch_p2 <matrixFile1> <matrixFile2>" << endl;
+    if(argc != 4){
+        cout << "USAGE: ./tminch_p2 <matrixFile1> <matrixFile2> <outputFileName>" << endl;
         return 1;
     }
     
+    string outputFileName = argv[3];
     vector<vector<double> > file1 = readMatrix(argv[1]);
     vector<vector<double> > file2 = readMatrix(argv[2]);
     if (file1.size() != file2.size()){
@@ -40,10 +41,13 @@ int main(int argc, char *argv[]){
         return 0;
     }
 
+    ofstream outfile;
+    outfile.open(outputFileName);
+
     for(int i = 0; i < file1.size(); i++){
         for(int j = 0; j < file1[i].size();j++)
-            cout << file1[i][j] + file2[i][j] << " ";
-        cout << endl;
+            outfile << file1[i][j] + file2[i][j] << " ";
+        outfile << "\n";
     }
 
     return 0;

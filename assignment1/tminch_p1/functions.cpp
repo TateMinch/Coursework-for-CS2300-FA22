@@ -1,9 +1,9 @@
 #include "functions.h"
-int** populateMatrix(int count, int incrementAmount, int rows, int cols, bool rowsFirst){    
+int** populateMatrix(int count, int incrementAmount, int rows, int cols, bool colsFirst){    
     int** mat = new int*[rows];
     for(int i = 0; i < rows; i++)
         mat[i] = new int[cols];
-    if(rowsFirst){
+    if(colsFirst){
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++, count += incrementAmount)
                 mat[i][j] = count;
@@ -18,11 +18,11 @@ int** populateMatrix(int count, int incrementAmount, int rows, int cols, bool ro
     return mat;
 }
 
-double** populateMatrix(double count, double incrementAmount, int rows, int cols, bool rowsFirst){
+double** populateMatrix(double count, double incrementAmount, int rows, int cols, bool colsFirst){
     double** mat = new double*[rows];
     for(int i = 0; i < rows; i++)
         mat[i] = new double[cols];
-    if(rowsFirst){
+    if(colsFirst){
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++, count += incrementAmount)
                 mat[i][j] = count;

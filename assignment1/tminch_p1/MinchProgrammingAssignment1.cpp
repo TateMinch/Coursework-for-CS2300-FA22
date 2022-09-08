@@ -7,11 +7,11 @@
 #include "functions.h"
 
 int main(){
-    int** mat1 = populateMatrix(1,1,FIRST_LETTERS, LAST_LETTERS, false);
-    int** mat2 = populateMatrix(4,2,LAST_LETTERS,FIRST_LETTERS, false);
-    double** mat3 = populateMatrix(0.3,0.1,LAST_LETTERS,FIRST_LETTERS,true);
-    int** mat4 = populateMatrix(3, 3, 9, 11, false);
-    double** mat5 = populateMatrix(-5.0, 1.5, 9, 11, true);
+    int** mat1 = populateMatrix(1,1,FIRST_LETTERS, LAST_LETTERS, true);
+    int** mat2 = populateMatrix(4,2,LAST_LETTERS,FIRST_LETTERS, true);
+    double** mat3 = populateMatrix(0.3,0.1,LAST_LETTERS,FIRST_LETTERS,false);
+    int** mat4 = populateMatrix(3, 3, 9, 11, true);
+    double** mat5 = populateMatrix(-5.0, 1.5, 9, 11, false);
 
     writeMatrix("tMinch_mat1.txt",mat1, FIRST_LETTERS, LAST_LETTERS);
     writeMatrix("tMinch_mat2.txt", mat2, LAST_LETTERS, FIRST_LETTERS);
