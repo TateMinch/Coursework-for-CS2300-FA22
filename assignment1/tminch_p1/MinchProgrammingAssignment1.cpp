@@ -17,8 +17,7 @@ int main(){
     writeMatrix("tMinch_mat2.txt", mat2, LAST_LETTERS, FIRST_LETTERS);
     writeMatrix("tMinch_mat3.txt", mat3, LAST_LETTERS, FIRST_LETTERS);
     writeMatrix("tMinch_mat4.txt", mat4, 9, 11);
-    writeMatrix("tMinch_mat4.txt", mat5, 9, 11);
-
+    writeMatrix("tMinch_mat5.txt", mat5, 9, 11);
     
     freeMemory(mat1, FIRST_LETTERS);
     freeMemory(mat2, LAST_LETTERS);
