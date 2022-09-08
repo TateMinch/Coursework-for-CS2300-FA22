@@ -1,0 +1,20 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(lldb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/Users/tate-minch/Documents/CS2300Assignments/ProgAssignments/assignment1/tminch_p3/test",
+            "args": ["test1.txt", "test2.txt", "test"],
+            //"stopAtEntry": false,
+            "cwd": "/Users/tate-minch/Documents/CS2300Assignments/ProgAssignments/assignment1/tminch_p3",
+            //"environment": [],
+            //"externalConsole": false,
+            "MIMode": "lldb"
+        }
+    ]
+}
