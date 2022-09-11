@@ -4,6 +4,10 @@
 
 using namespace std;
 
+/*
+* Takes in filename, opens and reads in by line, parses by space,
+* pushes onto 2d vector and returns full matrix
+*/
 vector<vector<double> > readMatrix(string filename){
     ifstream infile(filename);
     if(!infile.is_open())
