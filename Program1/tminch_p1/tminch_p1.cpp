@@ -7,6 +7,13 @@
 #include "functions.h"
 
 int main(){
+    string firstName, lastName;
+    cout << "Enter your first name and last name: ";
+    cin >> firstName >> lastName;
+
+    const int FIRST_LETTERS = firstName.length();
+    const int LAST_LETTERS = lastName.length();
+
     //populate the 5 matrices
     int** mat1 = populateMatrix(1,1,FIRST_LETTERS, LAST_LETTERS, true);
     int** mat2 = populateMatrix(4,2,LAST_LETTERS,FIRST_LETTERS, true);
