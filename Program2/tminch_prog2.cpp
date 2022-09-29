@@ -8,8 +8,10 @@ int main(int argc, char *argv[]){
         catch(const exception& e){
             std::cerr << e.what() << '\n';
         }
-    }else{
+    }else if(argc == 1){
         Board game;
+    }else{
+        cout << "USAGE: ./<prog> <inputfile> OR ./<prog>\n";
     }
     
 
