@@ -23,6 +23,7 @@ private:
 
     //control method
     void playGame(bool isManual);
+    //generate and print board
     void generateBoard(int n);
     void printBoard();
     //accepts input from file for play
@@ -37,6 +38,5 @@ private:
     void flipCells(pair<pair<int,int>, pair<int,int> > move, int i);
     //displays board at complete game
     void displayBoardEnd();
-    // void computeScore();
 };
 #endif

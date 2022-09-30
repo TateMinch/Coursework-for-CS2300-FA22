@@ -220,4 +220,12 @@ void Board::flipCells(pair<pair<int,int>, pair<int,int> > move, int i)
         mat[move.second.first - 1][move.second.second - 1] = 'O';
         p2Cells += 2;
     }
+    double slope = (move.first.second - move.second.second) / (move.first.first - move.second.first);
+    double intercept = move.first.second / (slope * move.first.first);
+    if(slope == 0)
+        intercept = 0;
+    for(int i = 0; i < n; i++){
+        int cols = slope * n + intercept;
+        mat[i][cols - 1] = 'X';
+    }
 }

@@ -13,7 +13,5 @@ int main(int argc, char *argv[]){
     }else{
         cout << "USAGE: ./<prog> <inputfile> OR ./<prog>\n";
     }
-    
-
     return 0;
 }
