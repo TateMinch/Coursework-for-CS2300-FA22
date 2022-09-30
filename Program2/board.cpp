@@ -102,26 +102,39 @@ void Board::playGame(bool isManual){
 }
 
 bool Board::isValid(pair<pair<int,int>, pair<int,int> > move){
+    //if any are out of bounds
     if(move.first.first > n || move.first.first <= 0 || move.first.second > n || move.first.second <= 0
         || move.second.first > n || move.second.first <= 0 || move.second.second > n || move.second.second <= 0)
             return false;
+    //get slope and inverse of slope of move line
     double slope = (move.first.second - move.second.second) / (move.first.first - move.second.first);
     double perpTest = -(move.first.first - move.second.first) / (move.first.second - move.second.second);
 
-    for(int i = 0; i < slopeList.size();i++){
-        if(slopeList[i] == perpTest)
-            return false;
+    if(k!= 0){
+        if(slopeList.size() < k){
+            for(int i = 0; i < slopeList.size();i++){
+                if(slopeList[i] == perpTest)
+                    return false;
+            }
+        }else{
+            for(int i = 0; i < k; i++){
+                if(slopeList[slopeList.size() - 1 - i] == perpTest)
+                    return false;
+            }
+        }
     }
     if(mat[move.first.first - 1][move.first.second - 1] != 'X' &&
         mat[move.first.first - 1][move.first.second - 1] != 'O' &&
         mat[move.second.first - 1][move.second.second - 1] != 'X' &&
         mat[move.second.first - 1][move.second.second - 1] != 'O')
     {
-        if(move.first.first == move.second.first && move.first.second == move.second.second){
-            //then do nothing
+        if(k != 0){
+            if(move.first.first == move.second.first && move.first.second == move.second.second){
+                //then do nothing
+            }
+            else
+                slopeList.push_back(slope);
         }
-        else
-            slopeList.push_back(slope);
         return true;
     }
     return false;
@@ -196,11 +209,8 @@ void Board::displayBoardEnd(){
         cout << "ITS A DRAW!\n";
 }
 
-
 void Board::flipCells(pair<pair<int,int>, pair<int,int> > move, int i)
 {
-    // int m_new = 2 * (move.second.second - move.first.second);
-    // int slope_error_new = m_new - (move.second.first - move.first.first);
     if(i % 2 == 0){
         mat[move.first.first - 1][move.first.second - 1] = 'X';
         mat[move.second.first - 1][move.second.second - 1] = 'X';
@@ -210,25 +220,4 @@ void Board::flipCells(pair<pair<int,int>, pair<int,int> > move, int i)
         mat[move.second.first - 1][move.second.second - 1] = 'O';
         p2Cells += 2;
     }
-
-    // for (int x = move.first.first, y = move.first.second; x <= move.second.first; x++) {
-    //     if(i % 2 == 0){
-    //         mat[x-1][y-1] = 'X';
-    //         p1Cells++;
-    //     }
-    //     else{
-    //         mat[x-1][y-1] = 'O';
-    //         p2Cells++;
-    //     }
- 
-    //     // Add slope to increment angle formed
-    //     slope_error_new += m_new;
- 
-    //     // Slope error reached limit, time to
-    //     // increment y and update slope error.
-    //     if (slope_error_new >= 0) {
-    //         y++;
-    //         slope_error_new -= 2 * (move.second.first - move.first.first);
-    //     }
-    // }
 }
