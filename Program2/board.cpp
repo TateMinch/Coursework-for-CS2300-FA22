@@ -2,7 +2,7 @@
 
 Board::Board(){
     bool manualPlay = true;
-    gameOver = false;
+    gameOver = false, p1InvalidMove = false, p2InvalidMove = false;
     p1Cells = 0, p2Cells = 0;
     cout << "Enter N for NxN grid: ";
     cin >> n;
@@ -33,12 +33,14 @@ void Board::playGame(bool isManual){
         //while still moves in list AND game is not over, validate
         while(i < moves.size() && !gameOver){
             //if valid
-            if(isValid(moves[i])){
+            if(isValid(moves[i], i)){
                 //flip cells, compute scores
                 flipCells(moves[i], i);
+            }else{
+                cout << "INVALID MOVE - NEXT PLAYERS MOVE" << endl;
             }
             //display grid and score
-            displayBoard(moves[i]);
+            displayBoard(moves[i], i);
             i++;
             bool breakOut = false;
             for(int j = 0; j < n && !breakOut; j++){
@@ -51,6 +53,8 @@ void Board::playGame(bool isManual){
                         gameOver = true;
                 }
             }
+            if(p1InvalidMove && p2InvalidMove)
+                gameOver = true;
         }
         //if game ended successfully
         if(gameOver){
@@ -80,11 +84,11 @@ void Board::playGame(bool isManual){
             cout << "Enter y2: ";
             cin >> move.second.second;
             //if valid, flip cells, compute scores
-            if(isValid(move)){
+            if(isValid(move, i)){
                 flipCells(move, i);
             }
             //display grid and score
-            displayBoard(move);
+            displayBoard(move, i);
             i++;
             bool breakOut = false;
             for(int j = 0; j < n && !breakOut; j++){
@@ -97,38 +101,61 @@ void Board::playGame(bool isManual){
                         gameOver = true;
                 }
             }
+            if(p1InvalidMove && p2InvalidMove)
+                gameOver = true;
         }
     }
 }
 
-bool Board::isValid(pair<pair<int,int>, pair<int,int> > move){
+bool Board::isValid(pair<pair<int,int>, pair<int,int> > move, int i){
     //if any are out of bounds
     if(move.first.first > n || move.first.first <= 0 || move.first.second > n || move.first.second <= 0
-        || move.second.first > n || move.second.first <= 0 || move.second.second > n || move.second.second <= 0)
+        || move.second.first > n || move.second.first <= 0 || move.second.second > n || move.second.second <= 0){
+            if(i % 2 == 0)
+                p1InvalidMove = true;
+            else
+                p2InvalidMove = true;
             return false;
+        }
     //get slope and inverse of slope of move line
     double slope = (move.first.second - move.second.second) / (move.first.first - move.second.first);
     double perpTest = -(move.first.first - move.second.first) / (move.first.second - move.second.second);
-
+    //if there is a k specified
     if(k!= 0){
+        //if there have been less than k moves made
         if(slopeList.size() < k){
-            for(int i = 0; i < slopeList.size();i++){
-                if(slopeList[i] == perpTest)
+            //check everything in list of slopes against current move
+            for(int j = 0; j < slopeList.size();j++){
+                if(slopeList[j] == perpTest){
+                    if(i % 2 == 0)
+                        p1InvalidMove = true;
+                    else
+                        p2InvalidMove = true;
                     return false;
+                }
             }
         }else{
-            for(int i = 0; i < k; i++){
-                if(slopeList[slopeList.size() - 1 - i] == perpTest)
+            //check only the last k slopes against current move
+            for(int j = 0; j < k; j++){
+                if(slopeList[slopeList.size() - 1 - j] == perpTest){
+                    if(i % 2 == 0)
+                        p1InvalidMove = true;
+                    else
+                        p2InvalidMove = true;
                     return false;
+                }
             }
         }
     }
+    //if both start and end point are empty
     if(mat[move.first.first - 1][move.first.second - 1] != 'X' &&
         mat[move.first.first - 1][move.first.second - 1] != 'O' &&
         mat[move.second.first - 1][move.second.second - 1] != 'X' &&
         mat[move.second.first - 1][move.second.second - 1] != 'O')
     {
+        //if k is greater than 0
         if(k != 0){
+            //if it is a single point, do not add to slope list
             if(move.first.first == move.second.first && move.first.second == move.second.second){
                 //then do nothing
             }
@@ -137,6 +164,10 @@ bool Board::isValid(pair<pair<int,int>, pair<int,int> > move){
         }
         return true;
     }
+    if(i % 2 == 0)
+        p1InvalidMove = true;
+    else
+        p2InvalidMove = true;
     return false;
 }
 
@@ -184,21 +215,26 @@ void Board::readFile(){
     }
 }
 
-void Board::displayBoard(pair<pair<int,int>, pair<int, int> > move){
-    cout << move.first.first << " " << move.first.second << " "
+void Board::displayBoard(pair<pair<int,int>, pair<int, int> > move, int i){
+    if(i % 2 == 0)
+        cout << "PLAYER 1 ";
+    else
+        cout << "PLAYER 2 ";
+    cout << "MOVE: " << move.first.first << " " << move.first.second << " "
         << move.second.first << " " << move.second.second << endl;
     cout << "PLAYER 1 SCORE: " << p1Cells << endl;
     cout << "PLAYER 2 SCORE: " << p2Cells << endl;
-    for(int i = 0; i < n; i++){
+    for(int l = 0; l < n; l++){
         for(int j = 0; j < n; j++){
-            cout << mat[i][j] << " ";
+            cout << mat[l][j] << " ";
         }
         cout << "\n";
     }
+    cout << "\n";
 }
 
 void Board::displayBoardEnd(){
-    cout << "\n---- GAME OVER ----\n";
+    cout << "---- GAME OVER ----\n";
     cout << "Player 1 score: " << p1Cells << endl;
     cout << "Player 2 score: " << p2Cells << endl;
     if(p1Cells > p2Cells)
@@ -211,21 +247,89 @@ void Board::displayBoardEnd(){
 
 void Board::flipCells(pair<pair<int,int>, pair<int,int> > move, int i)
 {
-    if(i % 2 == 0){
-        mat[move.first.first - 1][move.first.second - 1] = 'X';
-        mat[move.second.first - 1][move.second.second - 1] = 'X';
-        p1Cells += 2;
-    }else{
-        mat[move.first.first - 1][move.first.second - 1] = 'O';
-        mat[move.second.first - 1][move.second.second - 1] = 'O';
-        p2Cells += 2;
+    //if the first point is after the second
+    if(move.first.first > move.second.first){
+        //swap the points in the move
+        int temp = move.first.first;
+        move.first.first = move.second.first;
+        move.second.first = temp;
+        temp = move.first.second;
+        move.first.second = move.second.second;
+        move.second.second = temp;
     }
-    double slope = (move.first.second - move.second.second) / (move.first.first - move.second.first);
-    double intercept = move.first.second / (slope * move.first.first);
-    if(slope == 0)
-        intercept = 0;
-    for(int i = 0; i < n; i++){
-        int cols = slope * n + intercept;
-        mat[i][cols - 1] = 'X';
+    //if one of the divisors for slope is 0, set slope to 0
+    double slope;
+    if( ( (double)move.first.second - (double)move.second.second) == 0 ||
+        ((double)move.first.first - (double)move.second.first == 0)){
+            slope = 0;
     }
+    else
+        slope = ((double)move.first.second - (double)move.second.second) / 
+            ((double)move.first.first - (double)move.second.first);
+    //if slope is 0 and the x coordinates are the same
+    if(slope == 0 && move.first.first == move.second.first){
+        //increment over cols and set value
+        for(int j = 1; j <= n; j++){
+            if(j >= move.first.second && j <= move.second.second){
+                if(i % 2 == 0){
+                    if(mat[move.first.first - 1][j - 1] == 'O')
+                        p2Cells--;
+                    mat[move.first.first - 1][j - 1] = 'X';
+                    p1Cells++;
+                }else{
+                    if(mat[move.first.first - 1][j - 1] == 'X')
+                        p1Cells--;
+                    mat[move.first.first - 1][j - 1] = 'O';
+                    p2Cells++;
+                }
+            }
+        }
+    }
+    //if slope is 0 and y coordinates are the same
+    else if(slope == 0 && move.first.second == move.second.second){
+        //increment over rows and set values
+        for(int j = 1; j <= n; j++){
+            if(j >= move.first.first && j <= move.second.first){
+                if(i % 2 == 0){
+                    if(mat[j - 1][move.first.second - 1] == 'O')
+                        p2Cells--;
+                    mat[j - 1][move.first.second - 1] = 'X';
+                    p1Cells++;
+                }else{
+                    if(mat[j - 1][move.first.second - 1] == 'X')
+                        p1Cells--;
+                    mat[j - 1][move.first.second - 1] = 'O';
+                    p2Cells++;
+                }
+            }
+        }
+    }
+    else{
+        //calculate b
+        double b = -((double)slope * (double)move.first.first) + (double)move.first.second;
+        //for the values in the board
+        for(int j = 1; j <= n; j++){
+            //if the x value is in the bounds of the move
+            if(j >= move.first.first && j <= move.second.first){
+                //calculate y value
+                double y = slope * j + b;
+                //round to nearest number to get the closest cell
+                y = round(y);
+                //set cell
+                if(i % 2 == 0){
+                    if(mat[j-1][(int)y-1] == 'O')
+                        p2Cells--;
+                    mat[j - 1][(int)y - 1] = 'X';
+                    p1Cells++;
+                }
+                else{
+                    if(mat[j - 1][(int)y-1] == 'X')
+                        p1Cells--;
+                    mat[j - 1][(int)y - 1] = 'O';
+                    p2Cells++;
+                }
+            }
+        }
+    }
+
 }

@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ private:
     ifstream infile;
     char** mat;
     int n, k, p1Cells, p2Cells;
-    bool gameOver;
+    bool gameOver, p1InvalidMove, p2InvalidMove;
     vector< pair<pair<int,int>,
             pair<int,int> > > moves;
     vector<double> slopeList;
@@ -29,11 +30,11 @@ private:
     //accepts input from file for play
     void readFile();
     //displays board during active game
-    void displayBoard(pair<pair<int,int>, pair<int, int> > move);
+    void displayBoard(pair<pair<int,int>, pair<int, int> > move, int i);
     //frees dynamically allocated memory
     void freeMemory();
     //confirms move is valid
-    bool isValid(pair<pair<int,int>, pair<int,int> > move);
+    bool isValid(pair<pair<int,int>, pair<int,int> > move, int i);
     //flips cells and calculates score
     void flipCells(pair<pair<int,int>, pair<int,int> > move, int i);
     //displays board at complete game
