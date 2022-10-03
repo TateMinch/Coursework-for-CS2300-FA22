@@ -14,7 +14,7 @@ Board::Board(){
 
 Board::Board(string file){
     bool manualPlay = false;
-    gameOver = false;
+    gameOver = false, p1InvalidMove = false, p2InvalidMove = false;
     p1Cells = 0, p2Cells = 0;
     infile.open(file);
     if(!infile.is_open())
