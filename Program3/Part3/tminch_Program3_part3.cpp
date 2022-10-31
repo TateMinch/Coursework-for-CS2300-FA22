@@ -14,6 +14,7 @@ vector<vector<double> > readMatrix(string filename){
     vector<vector<double> > result;
 
     while(getline(infile,myline)){
+        //if file has more than 3 lines/rows
         if(result.size() == 3)
             throw invalid_argument("Matrix in file is too large! Try again!");
         for(int i = 0; i < myline.length(); i++){
@@ -24,18 +25,21 @@ vector<vector<double> > readMatrix(string filename){
                 temp2 = "";
             }else
                 temp2.push_back(myline[i]);
+            //if there are more than 3 elements in a row
             if(arr.size() > 3)
                 throw invalid_argument("Matrix in file is too large! Try again!");
         }
         result.push_back(arr);
         arr.clear();
     }
+    //if final matrix is not a 2x3 or a 3x3
     if((result.size() != 2 && result.size() != 3) || result[0].size() != 3){
         throw invalid_argument("Matrix in file is too small! Try again!");
     }
     return result;
 }
 
+//calculate area of two by three
 double areaTwoByThree(vector<vector<double> > mat){
     double p1[2] = {mat[0][0], mat[1][0]};
     double p2[2] = {mat[0][1], mat[1][1]};
@@ -44,6 +48,8 @@ double areaTwoByThree(vector<vector<double> > mat){
     return 0.5 * abs((p1[0] * (p2[1] - p3[2])) + (p2[0] * (p3[1] - p1[1]) + (p3[0] * (p1[1] - p2[1]))));
 
 }
+
+//calculate area of three by three
 double areaThreeBythree(vector<vector<double> > mat){
     double p1[3] = {mat[0][0], mat[1][0], mat[2][0]};
     double p2[3] = {mat[0][1], mat[1][1], mat[2][1]};
@@ -62,6 +68,7 @@ int main(int argc, char *argv[]){
 
     vector<vector<double> > temp;
     try{
+        //read in matrix
         temp = readMatrix(argv[1]);
     }
     catch(const exception& e){
