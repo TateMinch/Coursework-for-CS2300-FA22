@@ -13,6 +13,7 @@ vector<vector<double> > readMatrix(string filename){
     vector<vector<double> > result;
 
     while(getline(infile,myline)){
+        //if there are too many lines
         if(result.size() > 2)
             throw invalid_argument("Matrix in file is too large! Try again!");
         for(int i = 0; i < myline.length(); i++){
@@ -23,12 +24,14 @@ vector<vector<double> > readMatrix(string filename){
                 temp2 = "";
             }else
                 temp2.push_back(myline[i]);
+            //if there are too many elements in a line
             if(arr.size() > 3)
                 throw invalid_argument("Matrix in file is too large! Try again!");
         }
         result.push_back(arr);
         arr.clear();
     }
+    //if matrix is not a 2*3 at the end
     if(result.size() != 2 || result[0].size() != 3){
         throw invalid_argument("Matrix in file is too small! Try again!");
     }
@@ -36,6 +39,7 @@ vector<vector<double> > readMatrix(string filename){
 }
 
 int main(int argc, char *argv[]){
+    //check args
     if(argc != 2){
         cout << "USAGE: ./<progName> <input file>\n";
         return -1;
@@ -51,16 +55,19 @@ int main(int argc, char *argv[]){
 
     double A[2][2];
     double B[2];
+    //Get A from matrix
     for(int i = 0; i < 2; i++){
         for(int j = 0; j < 2; j++){
             A[i][j] = temp[i][j];
         }
     }
+    //Get B from matrix
     B[0] = temp[0][2];
     B[1] = temp[1][2];
 
     double shear[2][2] = {{1,0},{-A[1][0] / A[0][0],1}};
 
+    //shear the A matrix for Guassian substitution
     double shearedA[2][2];
     for(int i = 0; i < 2; i++){
         for(int j = 0; j < 2; j++){
@@ -70,13 +77,14 @@ int main(int argc, char *argv[]){
         }
     }
 
+    //Shear Matrix B
     double shearedB[2];
     for(int i = 0; i < 2; i++){
         for(int k = 0; k < 2; k++){
             shearedB[i] += shear[i][k] * B[k];
         }
     }
-
+    
     if(shearedA[1][1] == 0 && shearedB[1] != 0){
         cout << "Inconsistent solution.\n";
         return 0;
