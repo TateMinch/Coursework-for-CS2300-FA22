@@ -32,14 +32,27 @@ for i in range(len(data)):
 #if it gets past this point, input is valid
 #calculate/output eigenvector for webpages and the vector whos elements
 #are the webpages indices after sorting from the highest rank to the lowest
+
+#fill guess array with random values between 1 and 0
 guess = []
 for i in range(len(data)):
     addin = [random.uniform(0,1)]
     guess.append(addin)
 
-for i in range(10):
-    guess = np.matmul(np.array(data), np.array(guess))
-    guess = np.multiply(np.array(guess), 1/np.amax(np.array(guess)))
+# get max from guess
+oldMax = np.amax(np.array(guess))
+for i in range(1000000):
+    #matrix multiplication on guess and data
+    guess = [[sum(a*b for a,b in zip(X_row,Y_col)) for Y_col in zip(*np.array(guess))] for X_row in np.array(data)]
+    #normalize by max value
+    max = np.amax(np.array(guess))
+    for j in range(len(guess)):
+        guess[j][0] = guess[j][0] / max
+    #if eigenvalues have converged enough
+    if abs(max - oldMax) < 0.0001:
+        break
+    else:
+        oldMax = max
 
 unsortedRank = []
 sortedRank = []
