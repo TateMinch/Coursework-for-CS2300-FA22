@@ -71,7 +71,7 @@ for i in range(len(sortedRank)):
             rankIndices.append(j + 1)
             break
 
-outF = open("Vectors.txt", "w")
+outF = open("tminch_output_3_A.txt", "w")
 for item in unsortedRank:
     outF.write(str(item)[:4] + " ")
 outF.write("\n")

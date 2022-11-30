@@ -29,7 +29,7 @@ q = [data[0][0], data[0][1], data[0][2]]
 n = [data[0][3], data[0][4], data[0][5]]
 v = [data[0][6], data[0][7], data[0][8]]
 
-outF = open("ParallelProjections.txt", "w")
+outF = open("tminch_output_1_A.txt", "w")
 #for every line after the first, parallel project three points
 for i in range(1, len(data)):
     x = [data[i][0],data[i][1],data[i][2]]
@@ -78,6 +78,10 @@ for i in range(1, len(data)):
 
     outF.write("\n")
 
+outF = open("tminch_output_1_B.txt", "w")
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# perspective projection (part 2)
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 for i in range(len(data)):
     x = [data[i][0],data[i][1],data[i][2]]
     v = [-x[i] for i in range(len(x))]

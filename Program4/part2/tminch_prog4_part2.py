@@ -25,7 +25,7 @@ for i in range(len(data)):
 #if it gets past this point, input is valid, do part 1
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-outF = open("PlanePointDistance.txt", "w")
+outF = open("tminch_output_2_A.txt", "w")
 
 # distance between point and plane
 for i in range(len(data)):
@@ -74,6 +74,7 @@ def copy_matrix(M):
 
     return MC
 
+outF = open("tminch_output_2_B.txt", "w")
 intersect = False
 linePoint1 = [data[0][0],data[0][1],data[0][2]]
 linePoint2 = [data[0][3], data[0][4], data[0][5]]
@@ -127,9 +128,15 @@ for i in range(1,len(data)):
 
     if intersect:
         pointOfIntersection = [linePoint1[j] + BM[2][0] * v[j] for j in range(3)]
-        print(pointOfIntersection)
+        # print(pointOfIntersection)
+        for j in range(len(pointOfIntersection)):
+            outF.write(str(pointOfIntersection[j][0]) + " ")
     else:
-        print("Does Not Intersect")
+        outF.write("Does Not Intersect")
+    
+    outF.write("\n")
+
+outF.close()
 
 
     
