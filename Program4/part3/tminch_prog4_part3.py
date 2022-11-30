@@ -43,6 +43,7 @@ for i in range(len(data)):
 oldMax = np.amax(np.array(guess))
 for i in range(1000000):
     #matrix multiplication on guess and data
+    #this does NOT use a library, it is just a nested for loop in a python one liner
     guess = [[sum(a*b for a,b in zip(X_row,Y_col)) for Y_col in zip(*np.array(guess))] for X_row in np.array(data)]
     #normalize by max value
     max = np.amax(np.array(guess))
@@ -70,6 +71,11 @@ for i in range(len(sortedRank)):
             rankIndices.append(j + 1)
             break
 
-print([float(f'{item:.2f}') for item in unsortedRank])
-print(rankIndices)
-        
+outF = open("Vectors.txt", "w")
+for item in unsortedRank:
+    outF.write(str(item)[:4] + " ")
+outF.write("\n")
+for item in rankIndices:
+    outF.write(str(item) + " ")
+outF.write("\n")
+outF.close()

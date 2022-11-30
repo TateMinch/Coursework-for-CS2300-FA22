@@ -22,31 +22,114 @@ for i in range(len(data)):
         
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-#if it gets past this point, input is valid
+#if it gets past this point, input is valid, do part 1
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 outF = open("PlanePointDistance.txt", "w")
 
 # distance between point and plane
 for i in range(len(data)):
-    plane = [data[i][3], data[i][4], data[i][5]]
-    normalization = math.sqrt(plane[0] ** 2 + plane[1] ** 2 + plane[2] ** 2)
-    plane = [plane[j] / normalization for j in range(len(plane))]
-    point = [data[i][6], data[i][7], data[i][8]]
+    q = [data[i][0],data[i][1],data[i][2]]
+    n = [data[i][3], data[i][4], data[i][5]]
+    point = [data[i][6],data[i][7],data[i][8]]
+    dot1 = 0
+    dot2 = 0
+    dot3 = 0
+    for j in range(len(n)):
+        dot1 += -n[j] * q[j]
+        dot2 += n[j] * point[j]
+        dot3 += n[j] * n[j]
 
-    distance = 0
-    for j in range(len(plane)):
-        distance += plane[j] * point[j]
+    t = (dot1 + dot2) / dot3
+
+    distance = t * math.sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2)
 
     outF.write(str(distance) + "\n")
 
 outF.close() 
 
-# does triangle intersect with line
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# (part 2) does triangle intersect with line
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+def zeros_matrix(rows, cols):
+    A = []
+    for i in range(rows):
+        A.append([])
+        for j in range(cols):
+            A[-1].append(0.0)
+
+    return A
+
+
+def copy_matrix(M):
+    rows = len(M)
+    cols = len(M[0])
+
+    MC = zeros_matrix(rows, cols)
+
+    for i in range(rows):
+        for j in range(cols):
+            MC[i][j] = M[i][j]
+
+    return MC
+
+intersect = False
 linePoint1 = [data[0][0],data[0][1],data[0][2]]
 linePoint2 = [data[0][3], data[0][4], data[0][5]]
-direction = [data[0][6], data[0][7], data[0][8]]
+v = [linePoint2[i] - linePoint1[i] for i in range(len(linePoint1))]
 for i in range(1,len(data)):
-    trianglePoint1 = [data[i][0],data[i][1],data[i][2]]
-    trianglePoint2 = [data[i][3],data[i][4],data[i][5]]
-    trianglePoint3 = [data[i][6],data[i][7],data[i][8]]
+    x = [data[i][0],data[i][1],data[i][2]]
+    y = [data[i][3],data[i][4],data[i][5]]
+    z = [data[i][6],data[i][7],data[i][8]]
+
+    w = [y[j] - x[j] for i in range(len(x))]
+    r = [z[j] - z[j] for i in range(len(x))]
+
+    wrnegv = []
+
+    for j in range(3):
+        tempList = [w[j], r[j], -v[j]]
+        wrnegv.append(tempList)
+
+    B = []
+    for j in range(3):
+        B.append([linePoint1[j] - x[j]])
+
+    AM = copy_matrix(data)
+    n = len(data)
+    BM = copy_matrix(B)
+    
+    indices = list(range(n)) # allow flexible row referencing ***
+    for fd in range(n): # fd stands for focus diagonal
+        fdScaler = 1.0 / AM[fd][fd]
+        # FIRST: scale fd row with fd inverse. 
+        for j in range(n): # Use j to indicate column looping.
+            AM[fd][j] *= fdScaler
+        BM[fd][0] *= fdScaler
+        
+        # SECOND: operate on all rows except fd row.
+        for i in indices[0:fd] + indices[fd+1:]: # skip fd row.
+            crScaler = AM[i][fd] # cr stands for current row
+            for j in range(n): # cr - crScaler * fdRow.
+                AM[i][j] = AM[i][j] - crScaler * AM[fd][j]
+            BM[i][0] = BM[i][0] - crScaler * BM[fd][0]
+
+    for i in range(len(BM)):
+        for j in range(len(BM[i])):
+            BM[i][j] = round(BM[i][j])
+
+    if BM[0][0] < 1 and BM[0][0] > 0:
+        if BM[1][0] < 1 and BM[1][0] > 0:
+            if BM[0][0] + BM[1][0] < 1:
+                intersect = True
+
+
+    if intersect:
+        pointOfIntersection = [linePoint1[j] + BM[2][0] * v[j] for j in range(3)]
+        print(pointOfIntersection)
+    else:
+        print("Does Not Intersect")
+
+
+    
